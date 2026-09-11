@@ -1,0 +1,819 @@
+{
+  "card_testing": {
+    "title": "Card-testing attack",
+    "scam": "Criminals who buy stolen card numbers first make tiny online charges to find out which cards still work, then make one large purchase before the owner notices.",
+    "signals": [
+      "Burst of transactions within minutes",
+      "Night-time activity",
+      "Online (card-not-present) channel",
+      "Sudden jump from $1-3 to a large amount",
+      "Merchants never used by this card"
+    ],
+    "verdict": "MEDIUM",
+    "card": {
+      "last4": "6548",
+      "home_city": "Moorhead",
+      "state": "MS",
+      "n_txns": 2678,
+      "mean_amt": 49.6,
+      "txns_per_day": 5.79,
+      "night_share": 0.188,
+      "top_categories": [
+        "gas_transport",
+        "shopping_pos",
+        "kids_pets"
+      ]
+    },
+    "steps": [
+      {
+        "step": 1,
+        "minutes_from_start": 0,
+        "txn_time": "2020-04-08T23:30:00",
+        "amount": 1.19,
+        "category_label": "Online miscellaneous",
+        "probability": 3.10411119642183e-05,
+        "risk_score": 0.1,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.1,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "Made late at night (23:00-00:00); only 19% of this card's past transactions were at night",
+          "26.0 hours since the previous transaction"
+        ],
+        "mitigating": [
+          "Amount $1.19 is normal for this card",
+          "Online miscellaneous is a low-risk category",
+          "Normal activity level in the past 24 h"
+        ],
+        "components": {
+          "xgboost": 6.19957281742245e-05,
+          "random_forest": 0.015206711533100787,
+          "anomaly_percentile": 0.929
+        },
+        "latency_ms": 80.85
+      },
+      {
+        "step": 2,
+        "minutes_from_start": 3,
+        "txn_time": "2020-04-08T23:33:00",
+        "amount": 2.05,
+        "category_label": "Online miscellaneous",
+        "probability": 7.159279890362121e-07,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "Made late at night (23:00-00:00); only 19% of this card's past transactions were at night"
+        ],
+        "mitigating": [
+          "Amount $2.05 is normal for this card",
+          "Online miscellaneous is a low-risk category",
+          "Normal activity level in the past 24 h"
+        ],
+        "components": {
+          "xgboost": 4.7126653157647524e-07,
+          "random_forest": 0.01732787347058501,
+          "anomaly_percentile": 0.96416
+        },
+        "latency_ms": 146.27
+      },
+      {
+        "step": 3,
+        "minutes_from_start": 6,
+        "txn_time": "2020-04-08T23:36:00",
+        "amount": 1.5,
+        "category_label": "Online miscellaneous",
+        "probability": 6.600393527714748e-07,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "Made late at night (23:00-00:00); only 19% of this card's past transactions were at night",
+          "2 other transactions on this card in the past hour"
+        ],
+        "mitigating": [
+          "Amount $1.50 is normal for this card",
+          "Online miscellaneous is a low-risk category",
+          "Normal activity level in the past 24 h"
+        ],
+        "components": {
+          "xgboost": 3.805809285495343e-07,
+          "random_forest": 0.017392012810396474,
+          "anomaly_percentile": 0.98602
+        },
+        "latency_ms": 104.66
+      },
+      {
+        "step": 4,
+        "minutes_from_start": 9,
+        "txn_time": "2020-04-08T23:39:00",
+        "amount": 3.1,
+        "category_label": "Online miscellaneous",
+        "probability": 6.263249941022868e-07,
+        "risk_score": 31.0,
+        "risk_level": "MEDIUM",
+        "decision": "STEP_UP",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [
+          {
+            "id": "P3",
+            "title": "Micro-charge burst (card testing)",
+            "level": "MEDIUM",
+            "reason": "Policy P3: tiny online charge ($3.10) after 3 others in the past hour, the classic card-testing pattern"
+          }
+        ],
+        "reasons": [
+          "Policy P3: tiny online charge ($3.10) after 3 others in the past hour, the classic card-testing pattern",
+          "Made late at night (23:00-00:00); only 19% of this card's past transactions were at night",
+          "3 other transactions on this card in the past hour"
+        ],
+        "mitigating": [
+          "Amount $3.10 is normal for this card",
+          "Normal activity level in the past 24 h",
+          "Online miscellaneous is a low-risk category"
+        ],
+        "components": {
+          "xgboost": 1.3570797818829305e-07,
+          "random_forest": 0.014727355019483745,
+          "anomaly_percentile": 0.98928
+        },
+        "latency_ms": 97.88
+      },
+      {
+        "step": 5,
+        "minutes_from_start": 14,
+        "txn_time": "2020-04-08T23:44:00",
+        "amount": 849.99,
+        "category_label": "Online shopping",
+        "probability": 0.013156272338268628,
+        "risk_score": 31.0,
+        "risk_level": "MEDIUM",
+        "decision": "STEP_UP",
+        "ml_risk_score": 27.8,
+        "ml_risk_level": "LOW",
+        "policy": [
+          {
+            "id": "P1",
+            "title": "Burst then jump (account takeover / card testing cash-out)",
+            "level": "MEDIUM",
+            "reason": "Policy P1: 4 transactions in the past hour, then a jump to 17x the card's average amount"
+          },
+          {
+            "id": "N1",
+            "title": "Novelty alarm (Isolation Forest)",
+            "level": "MEDIUM",
+            "reason": "Novelty alarm: behaviour more unusual than 99.97% of normal transactions; possible new fraud pattern"
+          }
+        ],
+        "reasons": [
+          "Policy P1: 4 transactions in the past hour, then a jump to 17x the card's average amount",
+          "Novelty alarm: behaviour more unusual than 99.97% of normal transactions; possible new fraud pattern",
+          "Amount $849.99 is 17.2x this card's average spend ($50)",
+          "4 other transactions on this card in the past hour",
+          "23.6x what this card usually spends on Online shopping",
+          "Made late at night (23:00-00:00); only 19% of this card's past transactions were at night"
+        ],
+        "mitigating": [
+          "Normal activity level in the past 24 h",
+          "Established card with a long history",
+          "Merchant is close to the cardholder's usual area"
+        ],
+        "components": {
+          "xgboost": 0.03746199607849121,
+          "random_forest": 0.4386028303041068,
+          "anomaly_percentile": 0.99974
+        },
+        "latency_ms": 97.71
+      }
+    ]
+  },
+  "stolen_card_spree": {
+    "title": "Stolen-card spending spree",
+    "scam": "After a card is stolen or its details are phished, the fraudster spends as much as possible in a few hours, usually late at night, before the card is blocked.",
+    "signals": [
+      "Many transactions in 24 h compared with the card's normal",
+      "Cumulative spend in 24 h",
+      "Amounts far above the card's average",
+      "Night-time activity"
+    ],
+    "verdict": "HIGH",
+    "card": {
+      "last4": "6548",
+      "home_city": "Moorhead",
+      "state": "MS",
+      "n_txns": 2678,
+      "mean_amt": 49.6,
+      "txns_per_day": 5.79,
+      "night_share": 0.188,
+      "top_categories": [
+        "gas_transport",
+        "shopping_pos",
+        "kids_pets"
+      ]
+    },
+    "steps": [
+      {
+        "step": 1,
+        "minutes_from_start": 0,
+        "txn_time": "2020-04-08T22:15:00",
+        "amount": 312.4,
+        "category_label": "Grocery (in-store)",
+        "probability": 0.9998812958063585,
+        "risk_score": 100.0,
+        "risk_level": "HIGH",
+        "decision": "BLOCK",
+        "ml_risk_score": 100.0,
+        "ml_risk_level": "HIGH",
+        "policy": [],
+        "reasons": [
+          "Grocery (in-store) has a higher fraud rate in historical data",
+          "Amount $312.40 is 6.3x this card's average spend ($50)",
+          "Made late at night (22:00-23:00); only 19% of this card's past transactions were at night",
+          "24.7 hours since the previous transaction"
+        ],
+        "mitigating": [
+          "Established card with a long history",
+          "Normal activity level in the past 24 h",
+          "Merchant is close to the cardholder's usual area"
+        ],
+        "components": {
+          "xgboost": 0.999983549118042,
+          "random_forest": 0.6534548985362261,
+          "anomaly_percentile": 0.97486
+        },
+        "latency_ms": 99.08
+      },
+      {
+        "step": 2,
+        "minutes_from_start": 35,
+        "txn_time": "2020-04-08T22:50:00",
+        "amount": 489.99,
+        "category_label": "Shopping (in-store)",
+        "probability": 0.006020047014915685,
+        "risk_score": 12.7,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 12.7,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "Amount $489.99 is 9.9x this card's average spend ($50)",
+          "Made late at night (22:00-23:00); only 19% of this card's past transactions were at night",
+          "1 transactions ($312) in the past 24 h, 0.2x this card's usual daily activity"
+        ],
+        "mitigating": [
+          "Shopping (in-store) is a low-risk category",
+          "Merchant is close to the cardholder's usual area",
+          "Established card with a long history"
+        ],
+        "components": {
+          "xgboost": 0.014269587583839893,
+          "random_forest": 0.246471827965776,
+          "anomaly_percentile": 0.99052
+        },
+        "latency_ms": 121.96
+      },
+      {
+        "step": 3,
+        "minutes_from_start": 70,
+        "txn_time": "2020-04-08T23:25:00",
+        "amount": 64.2,
+        "category_label": "Fuel & transport",
+        "probability": 0.00012859725457715305,
+        "risk_score": 0.3,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.3,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "2 transactions ($802) in the past 24 h, 0.3x this card's usual daily activity",
+          "Made late at night (23:00-00:00); only 19% of this card's past transactions were at night",
+          "Fuel & transport has a higher fraud rate in historical data"
+        ],
+        "mitigating": [
+          "Amount $64.20 is normal for this card",
+          "Spend is consistent with this card's history",
+          "Merchant is close to the cardholder's usual area"
+        ],
+        "components": {
+          "xgboost": 0.00026525507564656436,
+          "random_forest": 0.029494017276338463,
+          "anomaly_percentile": 0.93576
+        },
+        "latency_ms": 103.69
+      },
+      {
+        "step": 4,
+        "minutes_from_start": 110,
+        "txn_time": "2020-04-09T00:05:00",
+        "amount": 925.0,
+        "category_label": "Online shopping",
+        "probability": 0.9772258765483431,
+        "risk_score": 98.9,
+        "risk_level": "HIGH",
+        "decision": "BLOCK",
+        "ml_risk_score": 98.9,
+        "ml_risk_level": "HIGH",
+        "policy": [],
+        "reasons": [
+          "Amount $925.00 is 18.5x this card's average spend ($50)",
+          "Made late at night (00:00-01:00); only 19% of this card's past transactions were at night",
+          "3 transactions ($867) in the past 24 h, 0.5x this card's usual daily activity",
+          "25.7x what this card usually spends on Online shopping"
+        ],
+        "mitigating": [
+          "Online shopping is a low-risk category",
+          "Merchant is close to the cardholder's usual area",
+          "Established card with a long history"
+        ],
+        "components": {
+          "xgboost": 0.9954956769943237,
+          "random_forest": 0.7405778608131348,
+          "anomaly_percentile": 0.99922
+        },
+        "latency_ms": 94.6
+      },
+      {
+        "step": 5,
+        "minutes_from_start": 150,
+        "txn_time": "2020-04-09T00:45:00",
+        "amount": 1045.5,
+        "category_label": "Online shopping",
+        "probability": 0.9930527839759811,
+        "risk_score": 99.6,
+        "risk_level": "HIGH",
+        "decision": "BLOCK",
+        "ml_risk_score": 99.6,
+        "ml_risk_level": "HIGH",
+        "policy": [
+          {
+            "id": "N1",
+            "title": "Novelty alarm (Isolation Forest)",
+            "level": "MEDIUM",
+            "reason": "Novelty alarm: behaviour more unusual than 99.97% of normal transactions; possible new fraud pattern"
+          }
+        ],
+        "reasons": [
+          "Novelty alarm: behaviour more unusual than 99.97% of normal transactions; possible new fraud pattern",
+          "Amount $1,045.50 is 20.8x this card's average spend ($50)",
+          "4 transactions ($1,792) in the past 24 h, 0.7x this card's usual daily activity",
+          "Made late at night (00:00-01:00); only 19% of this card's past transactions were at night",
+          "26.1x what this card usually spends on Online shopping"
+        ],
+        "mitigating": [
+          "Merchant is close to the cardholder's usual area",
+          "Established card with a long history",
+          "Online shopping is a low-risk category"
+        ],
+        "components": {
+          "xgboost": 0.9987967014312744,
+          "random_forest": 0.7903700898025382,
+          "anomaly_percentile": 0.9997
+        },
+        "latency_ms": 101.09
+      },
+      {
+        "step": 6,
+        "minutes_from_start": 200,
+        "txn_time": "2020-04-09T01:35:00",
+        "amount": 870.0,
+        "category_label": "Online miscellaneous",
+        "probability": 0.9972685855460325,
+        "risk_score": 99.9,
+        "risk_level": "HIGH",
+        "decision": "BLOCK",
+        "ml_risk_score": 99.9,
+        "ml_risk_level": "HIGH",
+        "policy": [
+          {
+            "id": "N1",
+            "title": "Novelty alarm (Isolation Forest)",
+            "level": "MEDIUM",
+            "reason": "Novelty alarm: behaviour more unusual than 99.95% of normal transactions; possible new fraud pattern"
+          }
+        ],
+        "reasons": [
+          "Novelty alarm: behaviour more unusual than 99.95% of normal transactions; possible new fraud pattern",
+          "Amount $870.00 is 17.2x this card's average spend ($51)",
+          "5 transactions ($2,837) in the past 24 h, 0.9x this card's usual daily activity",
+          "Made late at night (01:00-02:00); only 19% of this card's past transactions were at night",
+          "17.9x what this card usually spends on Online miscellaneous"
+        ],
+        "mitigating": [
+          "Merchant is close to the cardholder's usual area",
+          "Online miscellaneous is a low-risk category",
+          "Established card with a long history"
+        ],
+        "components": {
+          "xgboost": 0.9995730519294739,
+          "random_forest": 0.7756496431387244,
+          "anomaly_percentile": 0.99954
+        },
+        "latency_ms": 132.32
+      }
+    ]
+  },
+  "midnight_online": {
+    "title": "Late-night high-value online purchase",
+    "scam": "Card details leaked in a data breach or phishing page are used for a single expensive online order at an hour when the real cardholder is asleep.",
+    "signals": [
+      "Amount many times the card's average",
+      "Online channel",
+      "Night-time",
+      "Category this card rarely uses"
+    ],
+    "verdict": "HIGH",
+    "card": {
+      "last4": "6548",
+      "home_city": "Moorhead",
+      "state": "MS",
+      "n_txns": 2678,
+      "mean_amt": 49.6,
+      "txns_per_day": 5.79,
+      "night_share": 0.188,
+      "top_categories": [
+        "gas_transport",
+        "shopping_pos",
+        "kids_pets"
+      ]
+    },
+    "steps": [
+      {
+        "step": 1,
+        "minutes_from_start": 0,
+        "txn_time": "2020-04-08T02:10:00",
+        "amount": 1249.0,
+        "category_label": "Online shopping",
+        "probability": 0.6166522888356587,
+        "risk_score": 80.7,
+        "risk_level": "HIGH",
+        "decision": "BLOCK",
+        "ml_risk_score": 80.7,
+        "ml_risk_level": "HIGH",
+        "policy": [],
+        "reasons": [
+          "Amount $1,249.00 is 25.2x this card's average spend ($50)",
+          "Made late at night (02:00-03:00); only 19% of this card's past transactions were at night",
+          "34.7x what this card usually spends on Online shopping"
+        ],
+        "mitigating": [
+          "Normal activity level in the past 24 h",
+          "Merchant is close to the cardholder's usual area",
+          "Online shopping is a low-risk category"
+        ],
+        "components": {
+          "xgboost": 0.894787609577179,
+          "random_forest": 0.26598179413441314,
+          "anomaly_percentile": 0.99908
+        },
+        "latency_ms": 93.76
+      }
+    ]
+  },
+  "impossible_travel": {
+    "title": "Impossible travel (cloned card)",
+    "scam": "A skimmed card is cloned and used in a shop far away shortly after the genuine card was used near home. A person cannot physically be in both places.",
+    "signals": [
+      "Distance and speed since the previous transaction",
+      "Distance from home",
+      "Unsupervised anomaly score (this pattern is rare in labelled training data)"
+    ],
+    "verdict": "MEDIUM",
+    "card": {
+      "last4": "6548",
+      "home_city": "Moorhead",
+      "state": "MS",
+      "n_txns": 2678,
+      "mean_amt": 49.6,
+      "txns_per_day": 5.79,
+      "night_share": 0.188,
+      "top_categories": [
+        "gas_transport",
+        "shopping_pos",
+        "kids_pets"
+      ]
+    },
+    "steps": [
+      {
+        "step": 1,
+        "minutes_from_start": 0,
+        "txn_time": "2020-04-08T13:00:00",
+        "amount": 42.1,
+        "category_label": "Grocery (in-store)",
+        "probability": 7.173395100776385e-07,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [],
+        "mitigating": [
+          "Amount $42.10 is normal for this card",
+          "Normal activity level in the past 24 h",
+          "Normal time of day (13:00)"
+        ],
+        "components": {
+          "xgboost": 4.811805638382793e-07,
+          "random_forest": 0.005037022674790603,
+          "anomaly_percentile": 0.62986
+        },
+        "latency_ms": 94.16
+      },
+      {
+        "step": 2,
+        "minutes_from_start": 25,
+        "txn_time": "2020-04-08T13:25:00",
+        "amount": 389.0,
+        "category_label": "Shopping (in-store)",
+        "probability": 8.386346895267422e-07,
+        "risk_score": 31.0,
+        "risk_level": "MEDIUM",
+        "decision": "STEP_UP",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [
+          {
+            "id": "P2",
+            "title": "Impossible travel (cloned card)",
+            "level": "MEDIUM",
+            "reason": "Policy P2: 1,074 km from the previous transaction; the implied speed is faster than a commercial flight"
+          }
+        ],
+        "reasons": [
+          "Policy P2: 1,074 km from the previous transaction; the implied speed is faster than a commercial flight",
+          "Amount $389.00 is 7.8x this card's average spend ($50)"
+        ],
+        "mitigating": [
+          "Normal time of day (13:00)",
+          "Normal activity level in the past 24 h",
+          "Shopping (in-store) is a low-risk category"
+        ],
+        "components": {
+          "xgboost": 1.4982189213696984e-06,
+          "random_forest": 0.009892002793966412,
+          "anomaly_percentile": 0.98934
+        },
+        "latency_ms": 98.18
+      }
+    ]
+  },
+  "escalation": {
+    "title": "Escalating amounts (limit probing)",
+    "scam": "A fraudster probes how much the card will allow, raising the amount each time and moving into late evening.",
+    "signals": [
+      "Growing 24 h spend",
+      "Amount vs card history",
+      "Transition into night-time",
+      "Online categories"
+    ],
+    "verdict": "HIGH",
+    "card": {
+      "last4": "6548",
+      "home_city": "Moorhead",
+      "state": "MS",
+      "n_txns": 2678,
+      "mean_amt": 49.6,
+      "txns_per_day": 5.79,
+      "night_share": 0.188,
+      "top_categories": [
+        "gas_transport",
+        "shopping_pos",
+        "kids_pets"
+      ]
+    },
+    "steps": [
+      {
+        "step": 1,
+        "minutes_from_start": 0,
+        "txn_time": "2020-04-08T20:45:00",
+        "amount": 85.0,
+        "category_label": "Online miscellaneous",
+        "probability": 8.820481435579859e-06,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "23.2 hours since the previous transaction"
+        ],
+        "mitigating": [
+          "Amount $85.00 is normal for this card",
+          "Online miscellaneous is a low-risk category",
+          "Merchant is close to the cardholder's usual area"
+        ],
+        "components": {
+          "xgboost": 1.57857830345165e-05,
+          "random_forest": 0.00993048311790153,
+          "anomaly_percentile": 0.88474
+        },
+        "latency_ms": 113.17
+      },
+      {
+        "step": 2,
+        "minutes_from_start": 40,
+        "txn_time": "2020-04-08T21:25:00",
+        "amount": 160.0,
+        "category_label": "Online miscellaneous",
+        "probability": 2.1688067094821904e-06,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [],
+        "mitigating": [
+          "Amount $160.00 is normal for this card",
+          "Normal time of day (21:00)",
+          "Normal activity level in the past 24 h"
+        ],
+        "components": {
+          "xgboost": 3.0389260246010963e-06,
+          "random_forest": 0.02444799329102142,
+          "anomaly_percentile": 0.94618
+        },
+        "latency_ms": 105.27
+      },
+      {
+        "step": 3,
+        "minutes_from_start": 85,
+        "txn_time": "2020-04-08T22:10:00",
+        "amount": 340.0,
+        "category_label": "Online shopping",
+        "probability": 0.00030579293432543954,
+        "risk_score": 0.6,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.6,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "Made late at night (22:00-23:00); only 19% of this card's past transactions were at night",
+          "Amount $340.00 is 6.8x this card's average spend ($50)"
+        ],
+        "mitigating": [
+          "Online shopping is a low-risk category",
+          "Merchant is close to the cardholder's usual area",
+          "Normal activity level in the past 24 h"
+        ],
+        "components": {
+          "xgboost": 0.0006238908390514553,
+          "random_forest": 0.1387218395453725,
+          "anomaly_percentile": 0.99336
+        },
+        "latency_ms": 102.76
+      },
+      {
+        "step": 4,
+        "minutes_from_start": 130,
+        "txn_time": "2020-04-08T22:55:00",
+        "amount": 690.0,
+        "category_label": "Online shopping",
+        "probability": 0.2491850858539931,
+        "risk_score": 62.1,
+        "risk_level": "HIGH",
+        "decision": "BLOCK",
+        "ml_risk_score": 62.1,
+        "ml_risk_level": "HIGH",
+        "policy": [],
+        "reasons": [
+          "Amount $690.00 is 13.9x this card's average spend ($50)",
+          "Made late at night (22:00-23:00); only 19% of this card's past transactions were at night",
+          "18.4x what this card usually spends on Online shopping",
+          "3 transactions ($585) in the past 24 h, 0.5x this card's usual daily activity"
+        ],
+        "mitigating": [
+          "Merchant is close to the cardholder's usual area",
+          "Established card with a long history",
+          "Online shopping is a low-risk category"
+        ],
+        "components": {
+          "xgboost": 0.5449084043502808,
+          "random_forest": 0.45907614946584663,
+          "anomaly_percentile": 0.99882
+        },
+        "latency_ms": 93.72
+      }
+    ]
+  },
+  "normal_day": {
+    "title": "Normal customer day (control)",
+    "scam": "No fraud: everyday purchases that match the card's usual categories, amounts and times.",
+    "signals": [
+      "Amounts close to the card's average",
+      "Categories the card uses often",
+      "Daytime",
+      "Merchants near home"
+    ],
+    "verdict": "LOW",
+    "card": {
+      "last4": "6548",
+      "home_city": "Moorhead",
+      "state": "MS",
+      "n_txns": 2678,
+      "mean_amt": 49.6,
+      "txns_per_day": 5.79,
+      "night_share": 0.188,
+      "top_categories": [
+        "gas_transport",
+        "shopping_pos",
+        "kids_pets"
+      ]
+    },
+    "steps": [
+      {
+        "step": 1,
+        "minutes_from_start": 0,
+        "txn_time": "2020-04-08T12:30:00",
+        "amount": 39.68,
+        "category_label": "Fuel & transport",
+        "probability": 7.200485345723967e-07,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [
+          "Fuel & transport has a higher fraud rate in historical data"
+        ],
+        "mitigating": [
+          "Amount $39.68 is normal for this card",
+          "Normal activity level in the past 24 h",
+          "Normal time of day (12:00)"
+        ],
+        "components": {
+          "xgboost": 2.0295330216413277e-07,
+          "random_forest": 0.004943447549214609,
+          "anomaly_percentile": 0.59548
+        },
+        "latency_ms": 94.32
+      },
+      {
+        "step": 2,
+        "minutes_from_start": 180,
+        "txn_time": "2020-04-08T15:30:00",
+        "amount": 54.56,
+        "category_label": "Shopping (in-store)",
+        "probability": 9.401202281945474e-07,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [],
+        "mitigating": [
+          "Amount $54.56 is normal for this card",
+          "Normal activity level in the past 24 h",
+          "Merchant is close to the cardholder's usual area"
+        ],
+        "components": {
+          "xgboost": 1.8028416093329724e-07,
+          "random_forest": 0.019738116700527567,
+          "anomaly_percentile": 0.49988
+        },
+        "latency_ms": 96.47
+      },
+      {
+        "step": 3,
+        "minutes_from_start": 360,
+        "txn_time": "2020-04-08T18:30:00",
+        "amount": 29.76,
+        "category_label": "Kids & pets",
+        "probability": 9.294363634381402e-07,
+        "risk_score": 0.0,
+        "risk_level": "LOW",
+        "decision": "APPROVE",
+        "ml_risk_score": 0.0,
+        "ml_risk_level": "LOW",
+        "policy": [],
+        "reasons": [],
+        "mitigating": [
+          "Amount $29.76 is normal for this card",
+          "Normal activity level in the past 24 h",
+          "Normal time of day (18:00)"
+        ],
+        "components": {
+          "xgboost": 9.254769111066707e-07,
+          "random_forest": 0.019738116700527567,
+          "anomaly_percentile": 0.56872
+        },
+        "latency_ms": 98.14
+      }
+    ]
+  }
+}

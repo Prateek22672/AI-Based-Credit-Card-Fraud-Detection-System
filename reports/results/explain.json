@@ -1,0 +1,802 @@
+{
+  "global_importance": [
+    {
+      "feature": "amt",
+      "label": "Amount",
+      "mean_abs_shap": 3.3939244747161865
+    },
+    {
+      "feature": "sum_24h",
+      "label": "Amount spent in last 24 h",
+      "mean_abs_shap": 2.279791831970215
+    },
+    {
+      "feature": "is_night",
+      "label": "Night-time (22:00-04:00)",
+      "mean_abs_shap": 1.149726152420044
+    },
+    {
+      "feature": "card_history_len",
+      "label": "Card history length",
+      "mean_abs_shap": 0.8582186698913574
+    },
+    {
+      "feature": "amt_to_cat_mean",
+      "label": "Amount / card's category average",
+      "mean_abs_shap": 0.6522175073623657
+    },
+    {
+      "feature": "log_amt",
+      "label": "Amount (log)",
+      "mean_abs_shap": 0.6240232586860657
+    },
+    {
+      "feature": "log_secs_since_last",
+      "label": "Time since previous transaction",
+      "mean_abs_shap": 0.6130678057670593
+    },
+    {
+      "feature": "hour",
+      "label": "Hour of day",
+      "mean_abs_shap": 0.5675466060638428
+    },
+    {
+      "feature": "cnt_24h",
+      "label": "Transactions in last 24 h",
+      "mean_abs_shap": 0.5582823157310486
+    },
+    {
+      "feature": "log_city_pop",
+      "label": "Home city population",
+      "mean_abs_shap": 0.48202505707740784
+    },
+    {
+      "feature": "cnt_7d",
+      "label": "Transactions in last 7 days",
+      "mean_abs_shap": 0.44224053621292114
+    },
+    {
+      "feature": "night_share",
+      "label": "Card's usual night activity",
+      "mean_abs_shap": 0.4378538429737091
+    },
+    {
+      "feature": "amt_zscore",
+      "label": "Amount z-score vs card",
+      "mean_abs_shap": 0.4213714301586151
+    },
+    {
+      "feature": "cat_gas_transport",
+      "label": "Category: Fuel & transport",
+      "mean_abs_shap": 0.3243713080883026
+    },
+    {
+      "feature": "cat_share",
+      "label": "Card's share of this category",
+      "mean_abs_shap": 0.3156857490539551
+    },
+    {
+      "feature": "cat_grocery_pos",
+      "label": "Category: Grocery (in-store)",
+      "mean_abs_shap": 0.3124617636203766
+    },
+    {
+      "feature": "cnt_24h_vs_usual",
+      "label": "24 h activity vs usual",
+      "mean_abs_shap": 0.28108805418014526
+    },
+    {
+      "feature": "amt_to_card_mean",
+      "label": "Amount / card average",
+      "mean_abs_shap": 0.27715566754341125
+    },
+    {
+      "feature": "cat_shopping_net",
+      "label": "Category: Online shopping",
+      "mean_abs_shap": 0.25947391986846924
+    },
+    {
+      "feature": "cat_shopping_pos",
+      "label": "Category: Shopping (in-store)",
+      "mean_abs_shap": 0.2452794760465622
+    },
+    {
+      "feature": "speed_kmh",
+      "label": "Travel speed since previous transaction",
+      "mean_abs_shap": 0.22132346034049988
+    },
+    {
+      "feature": "dist_home_km",
+      "label": "Distance from home (km)",
+      "mean_abs_shap": 0.19480448961257935
+    },
+    {
+      "feature": "dist_prev_km",
+      "label": "Distance from previous transaction (km)",
+      "mean_abs_shap": 0.16314305365085602
+    },
+    {
+      "feature": "cat_misc_net",
+      "label": "Category: Online miscellaneous",
+      "mean_abs_shap": 0.15851949155330658
+    },
+    {
+      "feature": "day_of_week",
+      "label": "Day of week",
+      "mean_abs_shap": 0.1577325165271759
+    },
+    {
+      "feature": "cat_food_dining",
+      "label": "Category: Food & dining",
+      "mean_abs_shap": 0.1441366970539093
+    },
+    {
+      "feature": "cat_home",
+      "label": "Category: Home",
+      "mean_abs_shap": 0.1290564090013504
+    },
+    {
+      "feature": "cat_entertainment",
+      "label": "Category: Entertainment",
+      "mean_abs_shap": 0.1262507438659668
+    },
+    {
+      "feature": "cat_kids_pets",
+      "label": "Category: Kids & pets",
+      "mean_abs_shap": 0.09270235896110535
+    },
+    {
+      "feature": "cat_health_fitness",
+      "label": "Category: Health & fitness",
+      "mean_abs_shap": 0.08489373326301575
+    },
+    {
+      "feature": "cat_grocery_net",
+      "label": "Category: Online grocery",
+      "mean_abs_shap": 0.07491550594568253
+    },
+    {
+      "feature": "cat_personal_care",
+      "label": "Category: Personal care",
+      "mean_abs_shap": 0.06821676343679428
+    },
+    {
+      "feature": "cat_misc_pos",
+      "label": "Category: Miscellaneous (in-store)",
+      "mean_abs_shap": 0.0648757591843605
+    },
+    {
+      "feature": "cat_travel",
+      "label": "Category: Travel",
+      "mean_abs_shap": 0.05320184305310249
+    },
+    {
+      "feature": "cnt_1h",
+      "label": "Transactions in last 1 h",
+      "mean_abs_shap": 0.042612604796886444
+    },
+    {
+      "feature": "is_online",
+      "label": "Online / card-not-present",
+      "mean_abs_shap": 0.03854730352759361
+    },
+    {
+      "feature": "is_new_merchant",
+      "label": "First use at this merchant",
+      "mean_abs_shap": 0.01611591875553131
+    },
+    {
+      "feature": "is_weekend",
+      "label": "Weekend",
+      "mean_abs_shap": 0.008919471874833107
+    },
+    {
+      "feature": "is_new_category",
+      "label": "First use in this category",
+      "mean_abs_shap": 0.00046926908544264734
+    }
+  ],
+  "cases": [
+    {
+      "kind": "fraud caught (HIGH risk)",
+      "index": 54567,
+      "ts": "2020-05-03 03:03:19",
+      "amount": 514.17,
+      "category": "entertainment",
+      "merchant": "Schroeder, Hauck and Treutel",
+      "is_fraud": 1,
+      "probability": 0.6257844567298889,
+      "risk_score": 81.13505749624356,
+      "tier": "HIGH",
+      "components": {
+        "xgb": 0.8449246287345886,
+        "rf": 0.4004079991365511,
+        "anomaly_percentile": 0.95264
+      },
+      "reasons": [
+        "Amount $514.17 is 6.2x this card's average spend ($83)",
+        "Made late at night (03:00-04:00); only 23% of this card's past transactions were at night",
+        "Entertainment has a higher fraud rate in historical data",
+        "5.2x what this card usually spends on Entertainment"
+      ],
+      "mitigating": [
+        "Normal activity level in the past 24 h",
+        "Established card with a long history",
+        "Merchant is close to the cardholder's usual area"
+      ],
+      "top_groups": [
+        {
+          "group": "amount",
+          "label": "Transaction amount",
+          "shap": 4.241750240325928
+        },
+        {
+          "group": "time_of_day",
+          "label": "Time of day",
+          "shap": 0.7117801308631897
+        },
+        {
+          "group": "category",
+          "label": "Merchant category / channel",
+          "shap": 0.5680301785469055
+        },
+        {
+          "group": "spend_vs_history",
+          "label": "Spend vs card's history",
+          "shap": 0.4361576437950134
+        }
+      ],
+      "features": {
+        "amt": 514.1699829101562,
+        "log_amt": 6.244496822357178,
+        "hour": 3.0,
+        "is_night": 1.0,
+        "day_of_week": 6.0,
+        "is_weekend": 1.0,
+        "is_online": 0.0,
+        "log_city_pop": 14.882529258728027,
+        "dist_home_km": 112.8338394165039,
+        "card_history_len": 7.743703365325928,
+        "log_secs_since_last": 9.93008041381836,
+        "cnt_1h": 0.0,
+        "cnt_24h": 1.0,
+        "cnt_7d": 29.0,
+        "sum_24h": 164.9600067138672,
+        "cnt_24h_vs_usual": 0.21136876940727234,
+        "amt_to_card_mean": 6.098484992980957,
+        "amt_zscore": 3.654520034790039,
+        "amt_to_cat_mean": 5.229128837585449,
+        "is_new_category": 0.0,
+        "is_new_merchant": 0.0,
+        "night_share": 0.22679965198040009,
+        "dist_prev_km": 158.19677734375,
+        "speed_kmh": 27.7294979095459
+      }
+    },
+    {
+      "kind": "fraud caught (HIGH risk)",
+      "index": 79603,
+      "ts": "2020-05-13 09:51:42",
+      "amount": 326.23,
+      "category": "grocery_pos",
+      "merchant": "Schultz, Simonis and Little",
+      "is_fraud": 1,
+      "probability": 0.9994880557060242,
+      "risk_score": 99.97419187993479,
+      "tier": "HIGH",
+      "components": {
+        "xgb": 0.9999051094055176,
+        "rf": 0.8758560677518983,
+        "anomaly_percentile": 0.99408
+      },
+      "reasons": [
+        "Grocery (in-store) has a higher fraud rate in historical data",
+        "Large transaction amount ($326.23)",
+        "2 transactions ($1,906) in the past 24 h, 0.9x this card's usual daily activity",
+        "3 transactions on this card in the past 7 days"
+      ],
+      "mitigating": [
+        "Normal time of day (09:00)",
+        "Spend is consistent with this card's history",
+        "Merchant is close to the cardholder's usual area"
+      ],
+      "top_groups": [
+        {
+          "group": "category",
+          "label": "Merchant category / channel",
+          "shap": 3.6565823554992676
+        },
+        {
+          "group": "amount",
+          "label": "Transaction amount",
+          "shap": 3.4901230335235596
+        },
+        {
+          "group": "burst_24h",
+          "label": "Activity in last 24 h",
+          "shap": 3.244622230529785
+        },
+        {
+          "group": "week_activity",
+          "label": "Activity in last 7 days",
+          "shap": 0.965604841709137
+        }
+      ],
+      "features": {
+        "amt": 326.2300109863281,
+        "log_amt": 5.790663242340088,
+        "hour": 9.0,
+        "is_night": 0.0,
+        "day_of_week": 2.0,
+        "is_weekend": 0.0,
+        "is_online": 0.0,
+        "log_city_pop": 9.745780944824219,
+        "dist_home_km": 98.12814331054688,
+        "card_history_len": 1.3862943649291992,
+        "log_secs_since_last": 10.629997253417969,
+        "cnt_1h": 0.0,
+        "cnt_24h": 2.0,
+        "cnt_7d": 3.0,
+        "sum_24h": 1906.3900146484375,
+        "cnt_24h_vs_usual": 0.9193055629730225,
+        "amt_to_card_mean": 0.5092172026634216,
+        "amt_zscore": -0.5463443398475647,
+        "amt_to_cat_mean": 0.5092172026634216,
+        "is_new_category": 1.0,
+        "is_new_merchant": 1.0,
+        "night_share": 0.6666666865348816,
+        "dist_prev_km": 148.58419799804688,
+        "speed_kmh": 12.934112548828125
+      }
+    },
+    {
+      "kind": "fraud caught (HIGH risk)",
+      "index": 4986,
+      "ts": "2020-04-10 23:58:40",
+      "amount": 988.9,
+      "category": "shopping_pos",
+      "merchant": "Torphy-Goyette",
+      "is_fraud": 1,
+      "probability": 0.999966025352478,
+      "risk_score": 99.99828727110989,
+      "tier": "HIGH",
+      "components": {
+        "xgb": 0.9999938011169434,
+        "rf": 0.9896571807683509,
+        "anomaly_percentile": 0.99972
+      },
+      "reasons": [
+        "6 transactions ($3,069) in the past 24 h, 3.2x this card's usual daily activity",
+        "Amount $988.90 is 13.3x this card's average spend ($74)",
+        "Made late at night (23:00-00:00); only 28% of this card's past transactions were at night",
+        "4 other transactions on this card in the past hour"
+      ],
+      "mitigating": [
+        "Established card with a long history",
+        "Shopping (in-store) is a low-risk category",
+        "Card regularly uses Shopping (in-store)"
+      ],
+      "top_groups": [
+        {
+          "group": "burst_24h",
+          "label": "Activity in last 24 h",
+          "shap": 6.0938615798950195
+        },
+        {
+          "group": "amount",
+          "label": "Transaction amount",
+          "shap": 4.505911350250244
+        },
+        {
+          "group": "time_of_day",
+          "label": "Time of day",
+          "shap": 2.0137484073638916
+        },
+        {
+          "group": "burst_1h",
+          "label": "Burst of activity (1 h)",
+          "shap": 1.4409465789794922
+        }
+      ],
+      "features": {
+        "amt": 988.9000244140625,
+        "log_amt": 6.897603988647461,
+        "hour": 23.0,
+        "is_night": 1.0,
+        "day_of_week": 4.0,
+        "is_weekend": 0.0,
+        "is_online": 0.0,
+        "log_city_pop": 8.028454780578613,
+        "dist_home_km": 120.87712860107422,
+        "card_history_len": 6.77878475189209,
+        "log_secs_since_last": 7.22838830947876,
+        "cnt_1h": 4.0,
+        "cnt_24h": 6.0,
+        "cnt_7d": 19.0,
+        "sum_24h": 3069.2900390625,
+        "cnt_24h_vs_usual": 3.183401346206665,
+        "amt_to_card_mean": 13.10926342010498,
+        "amt_zscore": 5.308591842651367,
+        "amt_to_cat_mean": 22.645639419555664,
+        "is_new_category": 0.0,
+        "is_new_merchant": 0.0,
+        "night_share": 0.28246012330055237,
+        "dist_prev_km": 134.099609375,
+        "speed_kmh": 350.5871887207031
+      }
+    },
+    {
+      "kind": "fraud caught (HIGH risk)",
+      "index": 176459,
+      "ts": "2020-06-18 22:23:16",
+      "amount": 49.76,
+      "category": "misc_pos",
+      "merchant": "Wisozk and Sons",
+      "is_fraud": 1,
+      "probability": 0.842252254486084,
+      "risk_score": 92.04762548553681,
+      "tier": "HIGH",
+      "components": {
+        "xgb": 0.9589427709579468,
+        "rf": 0.08831463101602095,
+        "anomaly_percentile": 0.63628
+      },
+      "reasons": [
+        "Made late at night (22:00-23:00); only 27% of this card's past transactions were at night",
+        "2 transactions ($640) in the past 24 h, 0.7x this card's usual daily activity",
+        "Miscellaneous (in-store) has a higher fraud rate in historical data",
+        "Card/customer profile resembles past fraud victims"
+      ],
+      "mitigating": [
+        "Amount $49.76 is normal for this card",
+        "Spend is consistent with this card's history",
+        "Normal activity level this week"
+      ],
+      "top_groups": [
+        {
+          "group": "time_of_day",
+          "label": "Time of day",
+          "shap": 1.8935039043426514
+        },
+        {
+          "group": "burst_24h",
+          "label": "Activity in last 24 h",
+          "shap": 1.845902919769287
+        },
+        {
+          "group": "category",
+          "label": "Merchant category / channel",
+          "shap": 0.8413797616958618
+        },
+        {
+          "group": "profile",
+          "label": "Card profile",
+          "shap": 0.2643377184867859
+        }
+      ],
+      "features": {
+        "amt": 49.7599983215332,
+        "log_amt": 3.9271085262298584,
+        "hour": 22.0,
+        "is_night": 1.0,
+        "day_of_week": 3.0,
+        "is_weekend": 0.0,
+        "is_online": 0.0,
+        "log_city_pop": 5.7714409828186035,
+        "dist_home_km": 86.15789031982422,
+        "card_history_len": 7.3408355712890625,
+        "log_secs_since_last": 10.66455078125,
+        "cnt_1h": 0.0,
+        "cnt_24h": 2.0,
+        "cnt_7d": 22.0,
+        "sum_24h": 640.239990234375,
+        "cnt_24h_vs_usual": 0.6938672661781311,
+        "amt_to_card_mean": 0.8401326537132263,
+        "amt_zscore": -0.08978202193975449,
+        "amt_to_cat_mean": 1.3722443580627441,
+        "is_new_category": 0.0,
+        "is_new_merchant": 1.0,
+        "night_share": 0.27125242352485657,
+        "dist_prev_km": 39.26128005981445,
+        "speed_kmh": 3.301578998565674
+      }
+    },
+    {
+      "kind": "fraud sent to step-up verification (MEDIUM)",
+      "index": 79054,
+      "ts": "2020-05-12 23:35:15",
+      "amount": 19.91,
+      "category": "personal_care",
+      "merchant": "Bartoletti and Sons",
+      "is_fraud": 1,
+      "probability": 0.12445811182260513,
+      "risk_score": 47.19816506878058,
+      "tier": "MEDIUM",
+      "components": {
+        "xgb": 0.29646992683410645,
+        "rf": 0.13112894615777626,
+        "anomaly_percentile": 0.86676
+      },
+      "reasons": [
+        "Made late at night (23:00-00:00); only 22% of this card's past transactions were at night",
+        "Large transaction amount ($19.91)"
+      ],
+      "mitigating": [
+        "Established card with a long history",
+        "Merchant is close to the cardholder's usual area",
+        "Personal care is a low-risk category"
+      ],
+      "top_groups": [
+        {
+          "group": "time_of_day",
+          "label": "Time of day",
+          "shap": 1.8139476776123047
+        },
+        {
+          "group": "amount",
+          "label": "Transaction amount",
+          "shap": 0.9962061047554016
+        },
+        {
+          "group": "gap",
+          "label": "Timing vs previous transaction",
+          "shap": 0.007927052676677704
+        },
+        {
+          "group": "burst_1h",
+          "label": "Burst of activity (1 h)",
+          "shap": -0.015708915889263153
+        }
+      ],
+      "features": {
+        "amt": 19.90999984741211,
+        "log_amt": 3.0402274131774902,
+        "hour": 23.0,
+        "is_night": 1.0,
+        "day_of_week": 1.0,
+        "is_weekend": 0.0,
+        "is_online": 0.0,
+        "log_city_pop": 7.355001926422119,
+        "dist_home_km": 11.918476104736328,
+        "card_history_len": 7.760467052459717,
+        "log_secs_since_last": 7.219642162322998,
+        "cnt_1h": 1.0,
+        "cnt_24h": 3.0,
+        "cnt_7d": 27.0,
+        "sum_24h": 380.44000244140625,
+        "cnt_24h_vs_usual": 0.6368740797042847,
+        "amt_to_card_mean": 0.35327136516571045,
+        "amt_zscore": -0.29108038544654846,
+        "amt_to_cat_mean": 0.4652710556983948,
+        "is_new_category": 0.0,
+        "is_new_merchant": 0.0,
+        "night_share": 0.2200426459312439,
+        "dist_prev_km": 106.63047790527344,
+        "speed_kmh": 281.2232360839844
+      }
+    },
+    {
+      "kind": "false alarm (genuine blocked)",
+      "index": 121632,
+      "ts": "2020-05-30 23:23:03",
+      "amount": 1072.3,
+      "category": "shopping_net",
+      "merchant": "Mosciski, Ziemann and Farrell",
+      "is_fraud": 0,
+      "probability": 0.994544267654419,
+      "risk_score": 99.7249657881234,
+      "tier": "HIGH",
+      "components": {
+        "xgb": 0.9989491105079651,
+        "rf": 0.8010895503959301,
+        "anomaly_percentile": 0.99852
+      },
+      "reasons": [
+        "Amount $1,072.30 is 11.7x this card's average spend ($92)",
+        "7 transactions ($2,421) in the past 24 h, 1.5x this card's usual daily activity",
+        "9.4x what this card usually spends on Online shopping",
+        "Made late at night (23:00-00:00); only 21% of this card's past transactions were at night"
+      ],
+      "mitigating": [
+        "Established card with a long history",
+        "Online shopping is a low-risk category",
+        "Normal gap since the previous transaction"
+      ],
+      "top_groups": [
+        {
+          "group": "amount",
+          "label": "Transaction amount",
+          "shap": 4.772960662841797
+        },
+        {
+          "group": "burst_24h",
+          "label": "Activity in last 24 h",
+          "shap": 4.531486511230469
+        },
+        {
+          "group": "spend_vs_history",
+          "label": "Spend vs card's history",
+          "shap": 1.312840461730957
+        },
+        {
+          "group": "time_of_day",
+          "label": "Time of day",
+          "shap": 0.3400024473667145
+        }
+      ],
+      "features": {
+        "amt": 1072.300048828125,
+        "log_amt": 6.9784932136535645,
+        "hour": 23.0,
+        "is_night": 1.0,
+        "day_of_week": 5.0,
+        "is_weekend": 1.0,
+        "is_online": 1.0,
+        "log_city_pop": 8.682029724121094,
+        "dist_home_km": 110.90312194824219,
+        "card_history_len": 7.7931742668151855,
+        "log_secs_since_last": 9.948078155517578,
+        "cnt_1h": 0.0,
+        "cnt_24h": 7.0,
+        "cnt_7d": 42.0,
+        "sum_24h": 2420.9599609375,
+        "cnt_24h_vs_usual": 1.4900684356689453,
+        "amt_to_card_mean": 11.575182914733887,
+        "amt_zscore": 6.801641464233398,
+        "amt_to_cat_mean": 9.388171195983887,
+        "is_new_category": 0.0,
+        "is_new_merchant": 0.0,
+        "night_share": 0.2141972780227661,
+        "dist_prev_km": 46.48385238647461,
+        "speed_kmh": 8.002575874328613
+      }
+    },
+    {
+      "kind": "missed fraud (approved)",
+      "index": 167766,
+      "ts": "2020-06-15 18:00:10",
+      "amount": 780.14,
+      "category": "shopping_pos",
+      "merchant": "Denesik and Sons",
+      "is_fraud": 1,
+      "probability": 8.862183676683344e-06,
+      "risk_score": 0.018734382237330642,
+      "tier": "LOW",
+      "components": {
+        "xgb": 1.5543690096819773e-05,
+        "rf": 0.038975784094290075,
+        "anomaly_percentile": 0.98948
+      },
+      "reasons": [
+        "Amount $780.14 is 13.6x this card's average spend ($57)",
+        "9.0x what this card usually spends on Shopping (in-store)"
+      ],
+      "mitigating": [
+        "Normal activity level in the past 24 h",
+        "Normal time of day (18:00)",
+        "Established card with a long history"
+      ],
+      "top_groups": [
+        {
+          "group": "amount",
+          "label": "Transaction amount",
+          "shap": 4.260050296783447
+        },
+        {
+          "group": "spend_vs_history",
+          "label": "Spend vs card's history",
+          "shap": 0.413194477558136
+        },
+        {
+          "group": "burst_1h",
+          "label": "Burst of activity (1 h)",
+          "shap": -0.02396346628665924
+        },
+        {
+          "group": "novelty",
+          "label": "New behaviour for this card",
+          "shap": -0.35926127433776855
+        }
+      ],
+      "features": {
+        "amt": 780.1400146484375,
+        "log_amt": 6.660754203796387,
+        "hour": 18.0,
+        "is_night": 0.0,
+        "day_of_week": 0.0,
+        "is_weekend": 0.0,
+        "is_online": 0.0,
+        "log_city_pop": 5.783825397491455,
+        "dist_home_km": 69.91549682617188,
+        "card_history_len": 7.612831115722656,
+        "log_secs_since_last": 6.659294128417969,
+        "cnt_1h": 1.0,
+        "cnt_24h": 8.0,
+        "cnt_7d": 39.0,
+        "sum_24h": 317.67999267578125,
+        "cnt_24h_vs_usual": 2.1018378734588623,
+        "amt_to_card_mean": 13.382930755615234,
+        "amt_zscore": 5.777039527893066,
+        "amt_to_cat_mean": 8.983216285705566,
+        "is_new_category": 0.0,
+        "is_new_merchant": 0.0,
+        "night_share": 0.22095897793769836,
+        "dist_prev_km": 122.11869049072266,
+        "speed_kmh": 564.3482666015625
+      }
+    },
+    {
+      "kind": "normal transaction (approved)",
+      "index": 86860,
+      "ts": "2020-05-17 09:19:24",
+      "amount": 1.2,
+      "category": "misc_net",
+      "merchant": "Volkman Ltd",
+      "is_fraud": 0,
+      "probability": 6.273424787650583e-06,
+      "risk_score": 0.013261826000990285,
+      "tier": "LOW",
+      "components": {
+        "xgb": 1.956584856088739e-05,
+        "rf": 0.0003006879899297611,
+        "anomaly_percentile": 0.66094
+      },
+      "reasons": [
+        "2 transactions ($478) in the past 24 h, 1.0x this card's usual daily activity"
+      ],
+      "mitigating": [
+        "Amount $1.20 is normal for this card",
+        "Online miscellaneous is a low-risk category",
+        "Normal time of day (09:00)"
+      ],
+      "top_groups": [
+        {
+          "group": "burst_24h",
+          "label": "Activity in last 24 h",
+          "shap": 0.48041486740112305
+        },
+        {
+          "group": "week_activity",
+          "label": "Activity in last 7 days",
+          "shap": 0.10857804864645004
+        },
+        {
+          "group": "burst_1h",
+          "label": "Burst of activity (1 h)",
+          "shap": -0.0050165047869086266
+        },
+        {
+          "group": "novelty",
+          "label": "New behaviour for this card",
+          "shap": -0.3073748052120209
+        }
+      ],
+      "features": {
+        "amt": 1.2000000476837158,
+        "log_amt": 0.7884573340415955,
+        "hour": 9.0,
+        "is_night": 0.0,
+        "day_of_week": 6.0,
+        "is_weekend": 1.0,
+        "is_online": 1.0,
+        "log_city_pop": 6.6333184242248535,
+        "dist_home_km": 30.911897659301758,
+        "card_history_len": 6.872128009796143,
+        "log_secs_since_last": 9.765604019165039,
+        "cnt_1h": 0.0,
+        "cnt_24h": 2.0,
+        "cnt_7d": 12.0,
+        "sum_24h": 477.6000061035156,
+        "cnt_24h_vs_usual": 1.0392892360687256,
+        "amt_to_card_mean": 0.019052468240261078,
+        "amt_zscore": -0.6434641480445862,
+        "amt_to_cat_mean": 0.019595850259065628,
+        "is_new_category": 0.0,
+        "is_new_merchant": 0.0,
+        "night_share": 0.26556017994880676,
+        "dist_prev_km": 111.8211898803711,
+        "speed_kmh": 23.104877471923828
+      }
+    }
+  ]
+}

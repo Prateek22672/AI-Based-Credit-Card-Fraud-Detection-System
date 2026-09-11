@@ -1,0 +1,181 @@
+{
+  "rules": [
+    {
+      "id": "P1",
+      "title": "Burst then jump (account takeover / card testing cash-out)",
+      "level": "MEDIUM"
+    },
+    {
+      "id": "P2",
+      "title": "Impossible travel (cloned card)",
+      "level": "MEDIUM"
+    },
+    {
+      "id": "P3",
+      "title": "Micro-charge burst (card testing)",
+      "level": "MEDIUM"
+    },
+    {
+      "id": "N1",
+      "title": "Novelty alarm (Isolation Forest)",
+      "level": "MEDIUM"
+    }
+  ],
+  "novelty_percentile": 0.9995,
+  "val": {
+    "days": 83.99971064814815,
+    "rules": {
+      "P1": {
+        "fires": 49,
+        "fires_on_genuine": 5,
+        "fraud_rate": 0.8979591836734694,
+        "extra_alerts": 5,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.059524014564093376
+      },
+      "P2": {
+        "fires": 0,
+        "fires_on_genuine": 0,
+        "fraud_rate": 0.0,
+        "extra_alerts": 0,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.0
+      },
+      "P3": {
+        "fires": 6,
+        "fires_on_genuine": 6,
+        "fraud_rate": 0.0,
+        "extra_alerts": 6,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.07142881747691206
+      },
+      "N1": {
+        "fires": 137,
+        "fires_on_genuine": 29,
+        "fraud_rate": 0.7883211678832117,
+        "extra_alerts": 22,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.2619056640820108
+      }
+    },
+    "ml_only": {
+      "threshold": 0.5,
+      "precision": 0.6126389701579871,
+      "recall": 0.9924170616113744,
+      "f1": 0.7575976845151953,
+      "mcc": 0.7780777548713932,
+      "accuracy": 0.9958335924382812,
+      "fpr": 0.004143845263059059,
+      "alert_rate": 0.010627448541757354,
+      "tp": 1047,
+      "fp": 662,
+      "fn": 8,
+      "tn": 159093,
+      "fraud_amount_total": 567574.75,
+      "fraud_amount_caught": 565864.52,
+      "amount_recall": 0.9969867757506831,
+      "cost": 10255.229999999981,
+      "savings": 557319.52,
+      "savings_pct": 0.9819314900812625
+    },
+    "ml_plus_policy": {
+      "threshold": 0.5,
+      "precision": 0.6010332950631458,
+      "recall": 0.9924170616113744,
+      "f1": 0.7486592777976403,
+      "mcc": 0.770591501137097,
+      "accuracy": 0.9956283813195697,
+      "fpr": 0.004350411567713061,
+      "alert_rate": 0.010832659660468875,
+      "tp": 1047,
+      "fp": 695,
+      "fn": 8,
+      "tn": 159060,
+      "fraud_amount_total": 567574.75,
+      "fraud_amount_caught": 565864.52,
+      "amount_recall": 0.9969867757506831,
+      "cost": 10420.229999999981,
+      "savings": 557154.52,
+      "savings_pct": 0.9816407794744216
+    },
+    "extra_alerts_per_day": 0.39285849612301627
+  },
+  "test": {
+    "days": 74.508125,
+    "rules": {
+      "P1": {
+        "fires": 52,
+        "fires_on_genuine": 9,
+        "fraud_rate": 0.8269230769230769,
+        "extra_alerts": 8,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.10737084042847675
+      },
+      "P2": {
+        "fires": 0,
+        "fires_on_genuine": 0,
+        "fraud_rate": 0.0,
+        "extra_alerts": 0,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.0
+      },
+      "P3": {
+        "fires": 15,
+        "fires_on_genuine": 15,
+        "fraud_rate": 0.0,
+        "extra_alerts": 15,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.2013203258033939
+      },
+      "N1": {
+        "fires": 155,
+        "fires_on_genuine": 45,
+        "fraud_rate": 0.7096774193548387,
+        "extra_alerts": 39,
+        "extra_frauds": 0,
+        "extra_alerts_per_day": 0.5234328470888242
+      }
+    },
+    "ml_only": {
+      "threshold": 0.5,
+      "precision": 0.6137142857142858,
+      "recall": 0.9835164835164835,
+      "f1": 0.7558057705840957,
+      "mcc": 0.775381964444568,
+      "accuracy": 0.9962029610338451,
+      "fpr": 0.0037207868693651543,
+      "alert_rate": 0.009574665980938209,
+      "tp": 1074,
+      "fp": 676,
+      "fn": 18,
+      "tn": 181006,
+      "fraud_amount_total": 584135.25,
+      "fraud_amount_caught": 581968.69,
+      "amount_recall": 0.9962909959636915,
+      "cost": 10916.560000000056,
+      "savings": 573218.69,
+      "savings_pct": 0.9813115883693031
+    },
+    "ml_plus_policy": {
+      "threshold": 0.5,
+      "precision": 0.5933701657458563,
+      "recall": 0.9835164835164835,
+      "f1": 0.7401791867677463,
+      "mcc": 0.7622913820892525,
+      "accuracy": 0.9958746867716415,
+      "fpr": 0.004051034224634251,
+      "alert_rate": 0.009902940243141804,
+      "tp": 1074,
+      "fp": 736,
+      "fn": 18,
+      "tn": 180946,
+      "fraud_amount_total": 584135.25,
+      "fraud_amount_caught": 581968.69,
+      "amount_recall": 0.9962909959636915,
+      "cost": 11216.560000000056,
+      "savings": 572918.69,
+      "savings_pct": 0.9807980086803526
+    },
+    "extra_alerts_per_day": 0.8052813032135756
+  }
+}
