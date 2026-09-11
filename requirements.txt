@@ -1,0 +1,9 @@
+# Full research + API environment (Python 3.11).
+# Versions are pinned: the trained models in artifacts/ are pickled and must be
+# loaded with the same scikit-learn / XGBoost versions they were trained with.
+-r requirements-api.txt
+shap==0.51.0
+matplotlib==3.11.1
+python-docx==1.2.0
+pytest==9.1.1
+httpx==0.28.1

@@ -1,0 +1,4 @@
+# Optional: deep-learning baselines (MLP / 1D-CNN) used only in the research comparison.
+# Install the CPU build with:
+#   pip install -r requirements-dl.txt --index-url https://download.pytorch.org/whl/cpu
+torch==2.14.0

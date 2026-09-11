@@ -1,0 +1,36 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Raw and processed datasets (re-download with: python -m fraudlens.download)
+data/
+
+# Local decision-log databases and re-creatable benchmark models (the deployed engine stays)
+artifacts/*.db
+artifacts/models/
+tests/*.db
+
+# Intermediate document builds (the PDFs/DOCX in docs/ are the deliverables)
+docs/html/
+
+# Run logs
+reports/*.log
+reports/*.err
+
+# Frontend build output and dependencies
+frontend/node_modules/
+frontend/dist/
+
+# Team working notes (not part of the published project)
+20 papers with our observation and approach.docx
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Pipeline completion markers
+reports/*.done
