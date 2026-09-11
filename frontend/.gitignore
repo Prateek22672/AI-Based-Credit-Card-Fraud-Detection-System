@@ -1,0 +1,7 @@
+node_modules
+dist
+.vite
+*.local
+npm-debug.log*
+# NOTE: public/data/results and public/data/figures are committed on purpose:
+# static hosts (Vercel) build without ../reports, so the copies must be in git.
