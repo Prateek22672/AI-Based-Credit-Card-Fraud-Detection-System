@@ -22,5 +22,5 @@ COPY fraudlens fraudlens
 COPY artifacts artifacts
 COPY reports reports
 COPY --from=web /app/frontend/dist frontend/dist
-EXPOSE 8000
-CMD ["uvicorn", "fraudlens.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 10000
+CMD ["uvicorn", "fraudlens.api.main:app", "--host", "0.0.0.0", "--port", "10000"]
