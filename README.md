@@ -148,6 +148,7 @@ Interactive API docs: http://localhost:8000/docs. For example, score a transacti
 * [docs/Project_Report.pdf](docs/Project_Report.pdf) (colour, for reading) and [docs/Project_Report.docx](docs/Project_Report.docx) (for submission)
 * [docs/Literature_Mapping_Report.pdf](docs/Literature_Mapping_Report.pdf) / [.docx](docs/Literature_Mapping_Report.docx): every paper mapped to what we adopted and where
 * [docs/REVIEWER_QA.md](docs/REVIEWER_QA.md): exact answers on dataset columns vs categories, pre-processing choices, how the 0-100 risk bands are set, and how every headline metric is computed
+* [docs/PREPROCESSING_EXPLAINED.md](docs/PREPROCESSING_EXPLAINED.md): complete defence of the pre-processing pipeline — why no learned models, evidence from E2 and E3, and how to answer reviewer challenges confidently
 * [docs/API.md](docs/API.md): API reference
 * [docs/sources/literature.json](docs/sources/literature.json): verified bibliographic data for all sources
 
