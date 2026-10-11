@@ -27,8 +27,23 @@ docker run -d --name fraudlens --restart unless-stopped -p 8000:8000 \
 Without Docker: `pip install -r requirements-api.txt` and
 `uvicorn fraudlens.api.main:app --host 0.0.0.0 --port 8000` (Python 3.11).
 
-Free hosts with a sleeping tier (Render, Railway, Fly.io) also work: the image is ~1.5 GB and needs ~1 GB RAM.
-Serverless platforms are not suitable: the API keeps card state in memory and loads ~50 MB of models at start.
+The container listens on `$PORT` when the host sets one, otherwise 8000.
+
+## 1b. API on Render (free, no server to manage)
+
+1. New -> **Web Service** -> connect the GitHub repository.
+2. **Runtime: Docker** (Render reads the `Dockerfile`; leave the build and start commands empty).
+3. Instance type: the free tier works (the image needs ~1 GB RAM; the first build takes ~10 minutes).
+4. Environment variables: `FRAUDLENS_CORS_ORIGINS = https://<your-vercel-domain>` and
+   `FRAUDLENS_TOKEN_SECRET = <long random string>`. Render supplies `PORT` itself.
+5. The service URL (`https://<name>.onrender.com`) is what goes into Vercel's `VITE_API_URL`.
+
+On the free tier the service sleeps after ~15 minutes idle and takes ~1 minute to wake, and the decision log
+(SQLite inside the container) resets on each restart. Open the API URL once a few minutes before a demo, or
+run the live pages from your own machine instead.
+
+Railway and Fly.io work the same way. Serverless platforms (Vercel functions, Lambda) are **not** suitable:
+the API keeps per-card state in memory and loads ~50 MB of models at start.
 
 ## 2. Dashboard on Vercel
 

@@ -22,5 +22,7 @@ COPY fraudlens fraudlens
 COPY artifacts artifacts
 COPY reports reports
 COPY --from=web /app/frontend/dist frontend/dist
-EXPOSE 10000
-CMD ["uvicorn", "fraudlens.api.main:app", "--host", "0.0.0.0", "--port", "10000"]
+# Listen on $PORT when the host sets one (Render, Railway, Fly), else 8000.
+ENV PORT=8000
+EXPOSE 8000
+CMD ["sh", "-c", "uvicorn fraudlens.api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
