@@ -63,7 +63,7 @@ Online categories carry ~10× the fraud rate of the safest in-store ones, which 
 | `first`, `last`, `street`, `zip` | Personal data. A name or street address is not a fraud signal; keeping it only creates privacy risk. |
 | `job` | High-cardinality personal attribute; its apparent predictive power is memorisation of individuals, not fraud behaviour. |
 | `trans_num` | A unique id. A model can only memorise it, which is a classic leakage path. |
-| `merch_zipcode` | Mostly empty, and merchant location is already captured by `merch_lat`/`merch_long`. |
+| `merch_zipcode` | 15% missing, and merchant location is already captured exactly by `merch_lat`/`merch_long`. |
 | `Unnamed: 0` | The CSV row index. It correlates with time order and is pure leakage. |
 
 **Built but deliberately excluded from the model (2 features):** `age` and `gender`. Including them would add
