@@ -1,250 +1,113 @@
-# Pre-processing in FraudLens: the complete defence
+# Pre-processing in FraudLens: what it is, and why
 
-**The core claim:** FraudLens uses **no learned models in pre-processing** — only deterministic transformations. This is deliberate and defensible. Here's why, with evidence.
+Every number below comes from `reports/results/*.json` (experiments E2 and E3) and every test named exists in
+`tests/`.
 
----
+## 1. The short answer
 
-## 1. What is pre-processing and why it matters
+**There is no pre-processing model.** Pre-processing is a fixed, rule-based pipeline: nothing in it is fitted on
+the whole dataset, so nothing can carry information from the test period back into training. The only fitted
+transformer is a `StandardScaler`, and it is fitted on training rows only, inside the pipeline of the models that need
+scaling (Logistic Regression, MLP, CNN). The tree models (XGBoost, Random Forest, Isolation Forest) need no scaling.
 
-**Pre-processing** is everything that happens to raw data before the ML model sees it:
-- Cleaning (handling missing values, outliers, duplicates)
-- Transformation (scaling, encoding, feature engineering)
-- Splitting (train/validation/test)
-- Imbalance handling (resampling, weighting)
+The only learned components are the three detectors and the stacking layer, and those are the *model*, not
+pre-processing.
 
-On fraud data, every step can **leak information from the future into the training set**, making results look better than they are.
+## 2. The five steps
 
-**Example of leakage:** If you compute the mean spending per card **across all data**, then train on 2019 data using that mean, you are training on information from June 2020 frauds — which is unfair because your model learned to exploit future data.
+1. **Column selection and tokenisation.** 16 of 24 columns are loaded; card numbers become HMAC-SHA256 tokens
+   used only to group a card's history.
+2. **Chronological split, never shuffled.** Train 2019, validate Q1 2020, test Q2 2020, with a 7-day gap between
+   blocks because real fraud labels take days to confirm.
+3. **Causal feature engineering.** 41 features per transaction, each computed only from that card's earlier
+   transactions: velocity (1 h / 24 h / 7 d), amount against the card's own average, time since the last
+   transaction, distance from home, novelty flags.
+4. **Class imbalance: class weighting** inside model training. No synthetic rows, no discarded rows.
+5. **Scaling** only for the three models that need it, fitted on training data only.
 
----
+## 3. Why not the alternatives
 
-## 2. Our five-step pre-processing pipeline (all deterministic, no learned models)
+| Alternative | Why we did not use it |
+|---|---|
+| Learned transformer (autoencoder, PCA, learned imputer) fitted on all data | It sees the test period while "cleaning" training rows, so the evaluation is no longer on unseen data. Fitting it on training only is safe but adds a model whose benefit we cannot separate from the detector's. |
+| Per-card statistics over the whole dataset | A 2019 transaction would be compared with an average that includes 2020. Our averages use earlier transactions only. |
+| SMOTE before splitting | Synthetic rows are built from points that later land in the test set. Experiment E3 measures the damage (section 5). |
+| Random undersampling | Experiment E2 shows it wrecks the probabilities (section 4). |
+| Random (shuffled) split | Fraud patterns drift; a shuffled split lets the model train on the future. |
 
-```
-Raw transaction CSVs (24 columns)
-        ↓
-1. Column selection + card tokenisation
-   → Keep 16 columns; drop 8 (names, ids, duplicates)
-   → Replace card numbers with HMAC-SHA256 tokens
-        ↓
-2. Chronological ordering + splitting
-   → Sort by timestamp (never shuffle)
-   → Train: 2019 (Jan–Dec)
-   → Validation: Q1 2020 (Jan–Mar)
-   → Test: Q2 2020 (Apr–Jun)
-   → Gap: 7-day label-delay buffers between blocks
-        ↓
-3. Causal feature engineering
-   → 41 features, each computed from ONLY that card's past
-   → Velocity (1h, 24h, 7d counts)
-   → Amount vs this card's own average
-   → Time since last transaction
-   → Distance from home
-   → Novelty flags
-        ↓
-4. Class-imbalance handling: class weighting
-   → Applied inside model training only
-   → No resampling before the split
-        ↓
-5. Scaling (where needed)
-   → Logistic Regression, MLP, CNN: StandardScaler
-   → Random Forest, XGBoost: no scaling needed
-```
+## 4. Why class weighting: experiment E2 (XGBoost, same chronological split)
 
-**Key principle:** Every number is a function of **only the data known at that moment in time**. You cannot compute a feature for a January 2019 transaction using data from June 2020.
+| Strategy | PR-AUC | F1 @0.5 | F1 tuned | Brier | Mean predicted prob | Fit time |
+|---|---|---|---|---|---|---|
+| None | 0.9714 | 0.929 | 0.928 | 0.00069 | 0.0056 | 109 s |
+| **Class weighting (ours)** | 0.9784 | 0.932 | 0.937 | 0.00066 | 0.0066 | 133 s |
+| Undersampling 1:1 | 0.9598 | 0.539 | 0.907 | 0.00785 | 0.0198 | 9 s |
+| SMOTE 1:1 | 0.9801 | 0.941 | 0.940 | 0.00055 | 0.0059 | 211 s |
 
----
+The true fraud rate in the test period is 0.0060.
 
-## 3. What we DON'T do, and why
+* **Undersampling is clearly worst**: mean predicted probability 0.0198 against a true 0.0060, Brier about 12x worse.
+* **SMOTE is marginally ahead of class weighting on every column here** (0.9801 vs 0.9784 PR-AUC, 0.940 vs 0.937 F1).
+  We do not claim class weighting wins on accuracy. We chose it because it trains on real transactions only (nothing
+  synthetic to explain to an auditor), is 1.6x faster, and the difference is small enough that it does not change a
+  decision.
 
-### ❌ NO: Learn a transformer (autoencoder, PCA, VAE, imputer)
+## 5. Why order matters: experiment E3 (same XGBoost, four evaluation protocols)
 
-**What it looks like:**
-```python
-# BAD: This leaks the future
-scaler = StandardScaler()
-X_scaled = scaler.fit(all_data)  # ← fitted on 2019+2020+future together
-X_train = X_scaled.transform(X_train_2019)
-model.fit(X_train, y_train)
-```
-
-**Why it's dangerous:**
-- The scaler (or autoencoder) was fitted on **all data**, including the test period
-- It learned patterns from June 2020 to rescale January 2019 data
-- Your training set is effectively contaminated with future information
-- Results look great on test data because the model learned to exploit the preprocessing
-
-**Real cost:** One published paper on ULB that applied SMOTE before a random split reported F1 = 1.000. The same model, evaluated honestly with a chronological split, scores F1 = 0.803. **A 23% swing** from one preprocessing choice.
-
-### ❌ NO: Global statistics
-
-**What it looks like:**
-```python
-# BAD: Training set "knows" about frauds from 2020
-mean_spending_per_card = all_data.groupby('card')['amount'].mean()
-features['amt_vs_avg'] = transaction['amount'] / mean_spending_per_card[card]
-```
-
-**Why it's dangerous:**
-- The card's "average" includes transactions from after training data
-- A 2019 transaction is compared to an average that includes 2020 frauds
-- The model learns to detect patterns it shouldn't know yet
-
-### ❌ NO: SMOTE before splitting
-
-**What it looks like:**
-```python
-# BAD: Synthetic samples "know" about the test period
-X_resampled, y_resampled = SMOTE().fit_resample(all_data, labels)
-X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled)
-```
-
-**Why it's dangerous:**
-- SMOTE invented synthetic minority examples using the **entire dataset**
-- Those synthetic examples influence which data lands in training vs test
-- It's a form of data leakage: the resampling "sees" the test set
-
----
-
-## 4. What we DO: causal feature engineering
-
-**The principle:** A feature can only use information known at the time of the transaction.
-
-For a card's 1,000th transaction on Jan 15, 2020, we can compute:
-- ✓ "How many transactions in the last hour?" (uses txns 1–999)
-- ✓ "Is the amount more than 3× this card's average?" (average of txns 1–999)
-- ✓ "Days since the last transaction?" (txn 999's timestamp)
-- ✗ "Is this transaction 3× more than the card's June 2020 average?" (not known yet)
-- ✗ "Did this card commit fraud later?" (evaluation data, not a feature)
-
-**How we enforce it:**
-
-```python
-class FeatureStore:
-    def __init__(self, card_token):
-        self.card_token = card_token
-        self.history = []  # Transactions seen so far for this card
-    
-    def features(self, transaction):
-        """Compute 41 features using ONLY self.history (past)."""
-        past_txns = [t for t in self.history if t['timestamp'] < transaction['timestamp']]
-        
-        # These are causal (safe):
-        velocity_1h = len([t for t in past_txns if t['timestamp'] >= one_hour_ago])
-        mean_amount = sum(t['amount'] for t in past_txns) / len(past_txns)
-        
-        return [velocity_1h, mean_amount, ...]  # 41 features
-    
-    def update(self, transaction):
-        """Commit this transaction to history AFTER scoring."""
-        self.history.append(transaction)
-```
-
-**Proof of causality:** `test_features.py:test_causality()` proves that changing a later transaction cannot change an earlier transaction's features — it checks 1,000 random reorderings and verifies each one.
-
----
-
-## 5. Why class weighting, not SMOTE or undersampling?
-
-We ran **Experiment E2** on XGBoost with the same chronological split:
-
-| Strategy | PR-AUC | F1 tuned | Brier | Train time | Why not? |
-|---|---|---|---|---|---|
-| No balancing | 0.9714 | 0.928 | 0.00069 | 109s | Baseline, but class weights help |
-| **Class weighting (ours)** | **0.9784** | 0.937 | **0.00066** | 133s | **Trains on real data only; probabilities stay calibrated** |
-| Undersampling 1:1 | 0.9598 | 0.907 | 0.00785 | 9s | Throws away 99% of genuine data; predictions 3× overconfident |
-| SMOTE 1:1 | 0.9801 | 0.940 | 0.00055 | 211s | Slightly better, but invents synthetic behaviour + slower |
-
-**What the table really says:**
-
-- **Undersampling is clearly worst.** It predicts an average fraud probability of 0.0198 against a true rate of 0.006 — it's 3× overconfident. Brier score is 12× worse. Any risk score built on undersampling is meaningless.
-  
-- **SMOTE and class weighting are statistically indistinguishable** (0.9801 vs 0.9784, inside our ±0.005 CI). The 0.002 difference could easily vanish on a different random seed. We chose class weighting because:
-  1. It trains on **real transactions only** — SMOTE invents synthetic cardholder behaviour that never happened. If an auditor asks "does this cardholder really spend like this?", SMOTE doesn't have an answer.
-  2. It keeps the natural class prior (0.6% fraud) so probabilities stay calibrated — the stacking layer learns meaningful weights.
-  3. It's 1.6× faster to train (133s vs 211s).
-
-- **The threshold matters more than the resampling method.** Every strategy (none, weight, RUS, SMOTE) lands within 0.01 F1 once the threshold is tuned on validation data. The big win comes from choosing the right threshold, not the resampling trick.
-
----
-
-## 6. The proof: Experiment E3 (Evaluation protocol comparison)
-
-This is the smoking gun. We compared four ways to evaluate XGBoost on ULB:
-
-| Protocol | Order | SMOTE | Split | F1 (ULB) | What's wrong |
-|---|---|---|---|---|---|
-| A (leaky) | Chronological | Before split | Random 80/20 | **1.000** | SMOTE sees test set |
-| B (leaky) | Chronological | Before split | Chronological | 0.927 | SMOTE still sees future |
-| C (honest-ish) | Chronological | After split | Random | 0.917 | SMOTE only on train, but random split |
-| D (honest) | Chronological | After split | Chronological | **0.803** | Only real data; honest time order |
-
-**Same model. Same data. 23% swing (1.00 → 0.80) from preprocessing choices alone.**
-
-- **Protocol A** is what most published papers do (accidentally): apply SMOTE globally, then random split. It reports near-perfect results because the preprocessing leaked.
-- **Protocol D** is what FraudLens does: SMOTE only on training data (if at all), chronological split. Results are honest but lower.
-
-This proves:
-1. **Preprocessing choices matter enormously** — more than the model itself.
-2. **Leakage is invisible** — a paper reporting F1 1.00 has no idea it's leaking.
-3. **Our approach is conservative** — we report honest numbers, not inflated ones.
-
----
-
-## 7. How to explain this confidently to a reviewer
-
-**Short version (30 seconds):**
-> "Pre-processing is deterministic and causal: every feature uses only information known at the time of the transaction. No learned transformers, no global statistics, no SMOTE before splitting. We use class weighting inside training only, which trains on real data and keeps probabilities calibrated. Experiment E3 shows why this matters — the same model evaluated with common shortcuts reports F1 1.00, but honestly evaluated gives 0.80."
-
-**Medium version (2 minutes):**
-1. Show **what we do:** the five-step pipeline (deterministic, chronological, causal features, class weighting, scaling only where needed).
-2. Show **what we don't do:** no learned transformers, no global statistics, no SMOTE before splitting.
-3. Show **why it matters:** Experiment E3 table — 23% swing from preprocessing alone.
-4. Show **the evidence:** E2 table showing class weighting is as good as SMOTE but more defensible.
-
-**Long version (5 minutes, if challenged):**
-1. Define leakage and show the autoencoder example.
-2. Explain causality with the FeatureStore code and the proof test.
-3. Walk through the E2 table and explain why undersampling is dangerous.
-4. Show E3 Protocol A vs D and explain SMOTE's role.
-5. Conclude: "We chose the conservative path. Results are lower, but honest."
-
----
-
-## 8. Common challenges and how to answer them
-
-### Q: "Why not use an autoencoder to denoise the data?"
-**A:** "Autoencoders fitted on all data will use information from the test period to rescale training data. We can't know if impressive test results come from the model or from the preprocessing leaking the future. We prefer transparent, deterministic preprocessing."
-
-### Q: "SMOTE is standard in fraud detection. Why not use it?"
-**A:** "SMOTE works fine inside training (after the train/test split). We tested it in E2 and got the same results as class weighting. We chose weighting because (1) it trains on real behaviour only, (2) probabilities stay calibrated, and (3) it's faster. But honestly, the difference is small — the big risk is applying SMOTE before splitting."
-
-### Q: "Isn't 0.9784 PR-AUC just luck from your threshold choice?"
-**A:** "No, we learned thresholds on the validation period only. PR-AUC itself is threshold-independent — it integrates precision over all thresholds. And we have confidence intervals from 500 bootstrap resamples: [0.973, 0.984]. The number is solid."
-
-### Q: "How do you know your features don't leak?"
-**A:** "We have a unit test that proves causality: it changes later transactions and verifies that earlier transactions' features don't change. And we have a parity test: we replay 3,000 live transactions through the API's feature store and verify they match the training matrix to floating-point tolerance."
-
-### Q: "Why is your F1 0.803 when the paper you're benchmarking says 0.927?"
-**A:** "That paper applied SMOTE before the split. Our Experiment E3 Protocol C does the same and gets 0.917 — we match their leaky results. Protocol D (honest) gives 0.803. We chose to report the honest number."
-
----
-
-## 9. Summary: the three-layer defence
-
-| Layer | What we do | Why |
+| Protocol | ULB F1 | Sparkov F1 |
 |---|---|---|
-| **Philosophy** | Deterministic + causal | No learned models can leak |
-| **Evidence** | E2 (imbalance), E3 (protocols) | We tested alternatives; ours is defensible |
-| **Proof** | Unit tests (causality, parity) | Results are reproducible and auditable |
+| A. SMOTE on the whole dataset, then random 80/20 split | **0.9998** | **0.9997** |
+| B. Random split first, SMOTE on training data only | 0.835 | 0.938 |
+| C. Chronological split, SMOTE on training data only, threshold tuned on validation | 0.806 | 0.933 |
+| D. Chronological split, class weighting, threshold tuned on validation (**FraudLens**) | **0.803** | **0.929** |
 
-You can answer any challenge by pointing to one of these three.
+Protocol A is not a better model: it is the same model measured badly. SMOTE built synthetic points from rows that
+then appear in the test half, and the test half itself is half synthetic (`test_fraud_share` 0.50). On ULB the
+honest number is 0.803, a gap of about 0.20 F1. On Sparkov the gap is smaller (0.9997 to 0.929) but the headline
+is just as misleading.
 
----
+Note what B to D shows: once the leak in A is removed, the remaining differences are small. The big effect is the
+leak, not the choice between SMOTE and weighting.
 
-## References
+## 6. How we prove the features are causal
 
-- **Dal Pozzolo et al., 2018**: "Calibrating Probability with Undersampling for Unbalanced Classification" — class weighting is as effective as resampling.
-- **Santos et al., 2018**: "A review of deep learning techniques and applications for unmanned aerial vehicles" — demonstrates the leakage issue with SMOTE before splitting.
-- **Hayat & Magnier, 2025**: Our own E3 experiment reproduces this leakage effect on ULB.
-- **Kaufman et al., 2012**: Causal reasoning on learning pipelines — the FeatureStore design follows this principle.
+Both tests are in `tests/test_features.py`:
+
+* `test_features_do_not_see_future_transactions`: changes the last transaction of a card and asserts every earlier
+  row's features are identical.
+* `test_online_features_match_training_features`: replays 3,000 test transactions through the API's feature-store
+  snapshot and asserts the features equal the offline training matrix to within 1e-5. So training and serving
+  compute the same thing.
+
+## 7. Answers to likely questions
+
+**"What model do you use for pre-processing?"**
+None. It is rule-based and causal. The only fitted transformer is a training-only `StandardScaler` for LR/MLP/CNN.
+
+**"Why not SMOTE?"**
+We tested it (E2). It is marginally ahead on PR-AUC (0.9801 vs 0.9784). We prefer class weighting because it uses
+only real transactions and trains faster. The real danger is applying SMOTE before the split, which is what E3
+quantifies.
+
+**"Why not an autoencoder or PCA to denoise?"**
+Fitted on all data it leaks the future; fitted on training only it is safe but adds a model we would have to defend
+separately, and our features are already built from interpretable per-card behaviour. ULB's V1-V28 are PCA outputs
+for exactly that reason, and they cannot be explained to an analyst.
+
+**"Your F1 on ULB is only 0.80. Papers report 99%+."**
+Those figures match Protocol A. Same model, same data: 0.9998 under A, 0.803 under D.
+
+**"Is the feature store really leak-free?"**
+Two tests, section 6. One proves a later transaction cannot change an earlier row; the other proves training and
+live serving produce the same features.
+
+## 8. Sources
+
+* Santos et al. (2018), *Cross-Validation for Imbalanced Datasets: Avoiding Overoptimistic and Overfitting
+  Approaches*: resampling must happen inside training folds only.
+* Kaufman, Rosset, Perlich, Stitelman (2012), *Leakage in Data Mining: Formulation, Detection, and Avoidance*:
+  the leakage taxonomy behind the causal feature store.
+* Hayat and Magnier (2025), *Data Leakage and Deceptive Performance: A Critical Examination of Credit Card Fraud
+  Detection Methodologies*: the published description of the effect E3 reproduces.
+* Dal Pozzolo, Boracchi, Caelen, Alippi, Bontempi (2018), *Credit Card Fraud Detection: A Realistic Modeling and a
+  Novel Learning Strategy*: chronological evaluation with a label-delay gap.
