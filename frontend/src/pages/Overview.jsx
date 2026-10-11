@@ -47,6 +47,9 @@ export default function Overview() {
 
   const b = bench.data?.data || null;
   const metrics = model.data?.test_metrics || b?.hybrid?.test || null;
+  // the deployed operating point: cost-optimal alert threshold, as used by the live monitor
+  const cost = model.data?.test_cost_metrics || b?.hybrid?.test_cost_threshold || null;
+  const thresholds = model.data?.thresholds || health?.thresholds || null;
   const latency = model.data?.latency || b?.hybrid?.latency || null;
   const source = model.data ? "live model card" : b?.hybrid ? `benchmark_sparkov (${bench.data.source})` : null;
 
@@ -114,12 +117,22 @@ export default function Overview() {
         )}
         <KpiGrid cols={6}>
           <KpiTile label="PR-AUC" value={num(metrics?.pr_auc, 3)} sub="average precision (primary metric)" icon={Target} tone="indigo" />
-          <KpiTile label="Recall" value={pct(metrics?.recall)} sub="frauds caught at the alert threshold" icon={ShieldAlert} tone="red" />
+          <KpiTile label="Recall" value={pct(metrics?.recall)} sub="frauds caught at the F1-tuned threshold" icon={ShieldAlert} tone="red" />
           <KpiTile label="Precision" value={pct(metrics?.precision)} sub="alerts that were real fraud" icon={ShieldCheck} tone="green" />
           <KpiTile label="F1 score" value={num(metrics?.f1, 3)} sub={metrics ? `MCC ${num(metrics.mcc, 3)}` : "harmonic mean"} icon={TrendingUp} tone="violet" />
           <KpiTile label="Fraud $ caught" value={pct(metrics?.amount_recall)} sub={metrics ? `of $${Math.round(metrics.fraud_amount_total).toLocaleString("en-US")} at risk` : "share of fraud value"} icon={DollarSign} tone="teal" />
           <KpiTile label="Latency p50" value={ms(latency?.p50_ms, 1)} sub={latency ? `p95 ${ms(latency.p95_ms, 1)} per transaction` : "per transaction"} icon={Timer} tone="amber" />
         </KpiGrid>
+        {cost && thresholds && (
+          <p className="mt-3 text-[12.5px] leading-relaxed text-ink-2">
+            <span className="font-semibold text-ink">Two operating points.</span> PR-AUC is threshold-free; the other
+            tiles are measured at the F1-tuned threshold ({num(metrics?.threshold, 3)}), which is how the models are
+            compared with each other. <span className="font-semibold text-ink">In deployment</span> the engine runs at
+            the cost-optimal alert threshold ({num(thresholds.alert, 3)}): {pct(cost.recall)} recall at {pct(cost.precision)} precision,
+            stopping {pct(cost.amount_recall)} of fraud value — that is the operating point the Live Monitor and the
+            risk tiers use.
+          </p>
+        )}
       </section>
 
       {/* comparison + pipeline */}
